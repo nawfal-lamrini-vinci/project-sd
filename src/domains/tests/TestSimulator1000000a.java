@@ -1,15 +1,19 @@
-package tests;
+package domains.tests;
 
+import domains.models.Graph;
+import domains.models.Localisation;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.Deque;
 import java.util.Map;
 
-public class TestSimulator10 {
+public class TestSimulator1000000a {
     public static void main(String[] args) {
+        double epsilon = 0.1 ;
+        double k = 0.05 ;
         System.out.println("---------------------------------------------------------------");
         LocalTime start = LocalTime.now() ;
-        Graph graph = new Graph("nodes_10.csv","edges_10.csv");
+        Graph graph = new Graph("nodes_1000000.csv","edges_1000000.csv");
         LocalTime graphReady = LocalTime.now() ;
         Duration d = Duration.between(start,graphReady) ;
         System.out.println();
@@ -17,9 +21,9 @@ public class TestSimulator10 {
         System.out.println("Temps de chargement : "+d.toMinutes()+"m"+d.toSecondsPart()+"s"+d.toNanosPart()+"ns");
         System.out.println();
         System.out.println("---------------------------------------------------------------");
-        long idDepartCrue = 3060525656l ;
+        long[] idsDepartCrue = {3060525656l,12974725584l,1098529543} ;
         start = LocalTime.now() ;
-        Localisation[] zoneInondee = graph.determinerZoneInondee(new long[]{idDepartCrue});
+        Localisation[] zoneInondee = graph.determinerZoneInondee(idsDepartCrue,epsilon);
         LocalTime tempCalculZoneInondée = LocalTime.now() ;
         d = Duration.between(start, tempCalculZoneInondée);
         System.out.println();
@@ -33,7 +37,7 @@ public class TestSimulator10 {
         System.out.println();
         System.out.println("---------------------------------------------------------------");
         long idDepartTrajet = 1132625517 ;
-        long idDestination = 1132625443 ;
+        long idDestination = 11863011397l ;
         start = LocalTime.now() ;
         Deque<Localisation> chemin = graph.trouverCheminLePlusCourtPourContournerLaZoneInondee(idDepartTrajet,idDestination,zoneInondee) ;
         LocalTime tempsCalculCheminPlusCourtPourEviterZoneInondee = LocalTime.now() ;
@@ -41,7 +45,6 @@ public class TestSimulator10 {
         System.out.println();
         System.out.println("Temps de calcul pour le chemin le plus court évitant la zone inondée : "+d.toMinutes()+"m"+d.toSecondsPart()+"s"+d.toNanosPart()+"ns");
         System.out.println();
-
         System.out.println("Chemin le plus court pour contourner la zone inondée :");
         System.out.println("------------------------------------------------------");
         int i=1 ;
@@ -53,7 +56,7 @@ public class TestSimulator10 {
         System.out.println("---------------------------------------------------------------");
         System.out.println();
         start = LocalTime.now() ;
-        Map<Localisation,Double> tFlood =  graph.determinerChronologieDeLaCrue(new long[]{idDepartCrue},0);
+        Map<Localisation,Double> tFlood =  graph.determinerChronologieDeLaCrue(idsDepartCrue,0,k);
         LocalTime tempsDeterminationChronologieDeLaCrue = LocalTime.now() ;
         d = Duration.between(start,tempsDeterminationChronologieDeLaCrue);
         System.out.println("Temps de calcul pour la chronologie de la crue : "+d.toMinutes()+"m"+d.toSecondsPart()+"s"+d.toNanosPart()+"ns");
