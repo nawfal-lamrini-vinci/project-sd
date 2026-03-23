@@ -13,7 +13,7 @@ public class TestSimulator1000000a {
         double k = 0.05 ;
         System.out.println("---------------------------------------------------------------");
         LocalTime start = LocalTime.now() ;
-        Graph graph = new Graph("nodes_1000000.csv","edges_1000000.csv");
+        Graph graph = new Graph("nodes/nodes_1000000.csv","edges/edges_1000000.csv");
         LocalTime graphReady = LocalTime.now() ;
         Duration d = Duration.between(start,graphReady) ;
         System.out.println();
